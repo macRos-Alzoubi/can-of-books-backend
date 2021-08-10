@@ -17,9 +17,9 @@
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^2.0.3",
     "mongoose": "^5.13.5",
+    "nodemon": "^2.0.12",
     "validator": "^13.6.0"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/macRos-Alzoubi/can-of-books-backend.git"
