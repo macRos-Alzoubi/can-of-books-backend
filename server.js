@@ -53,9 +53,42 @@ const postBooksHandler = (req, res) =>{
 };
 
 
+
+
+const deleteBookHandler =(req,res)=>{
+  const id = req.params.id; 
+  const {userEmail} = req.query;
+
+  modelCollecion.userModel.find({email: userEmail}, (err, resultData) =>{
+    if(err) {
+      res.status(500).send('Error',err);
+    }
+    else {
+      const newBooks= resultData[0].books.filter((book,index) =>{
+
+        index != id ? true : false ;
+
+      });
+      resultData[0].books = newBooks;
+      resultData[0].save();
+      res.status(200).send(resultData[0].books);
+      
+    }
+  })
+
+
+};
+
+
+
+
+
+
+
 app.get('/books', getBooksHandler);
 
 app.post('/books', postBooksHandler);
+app.delete('/books/:id',deleteBookHandler);
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
 
 
@@ -70,18 +103,18 @@ const seedBook = () =>{
   });
 
   const user1 = new modelCollecion.userModel({
-    email : 'macros.alzoubi@gmail.com',
+    email : 'tareq.ha130@yahoo.com',
     books: [book1],
   });
 
-  // const book2 = new userModel({
+  // const book2 = new modelCollecion.bookModel({
   //   title : 'Ulysses',
     
   //   description : `Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyssey (e.g., the correspondences between Leopold Bloom and Odysseus, Molly Bloom and Penelope, and Stephen Dedalus and Telemachus). Joyce fans worldwide now celebrate June 16 as Bloomsday.`,
     
   //   status : 'TOP FAVORITE BOOK',
-  //   email : 'macRos.alzoubi@gmail.com',
-  //   img : 'https://d3i5mgdwi2ze58.cloudfront.net/usuab7s8yuwlcmadwx9woy746lvi',
+    
+    
   // });
 
   // const book3 = new userModel({
