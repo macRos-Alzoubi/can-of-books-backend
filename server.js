@@ -16,7 +16,7 @@ mongoose.connect('mongodb://localhost:27017/userBook', {useNewUrlParser: true, u
 
 const getBooksHandler = (req, res) => {
   const email = req.query.email;
-  console.log(email);
+  console.log('in get email: ' + email);
   modelCollecion.userModel.find({email:email},function(err,resultData){
     if(err) {
       console.log('Error');
@@ -42,12 +42,9 @@ const postBooksHandler = (req, res) =>{
     if(err)
       res.status(500).send(err.message);
     else{
-      console.log(userEmail);
-      console.log('resultData: ' , resultData);
-      console.log('resultData.books' , resultData[0].books);
       resultData[0].books.push(newBook);
       resultData[0].save();
-      res.send(newBook);
+      res.status(200).send(newBook);
     }
   });
 };
@@ -56,6 +53,8 @@ const postBooksHandler = (req, res) =>{
 
 
 const deleteBookHandler =(req,res)=>{
+  
+  console.log('in del');
   const id = req.params.id; 
   const {userEmail} = req.query;
 
@@ -64,11 +63,7 @@ const deleteBookHandler =(req,res)=>{
       res.status(500).send('Error',err);
     }
     else {
-      const newBooks= resultData[0].books.filter((book,index) =>{
-
-        index != id ? true : false ;
-
-      });
+      const newBooks= resultData[0].books.filter((book,index) => index != id);
       resultData[0].books = newBooks;
       resultData[0].save();
       res.status(200).send(resultData[0].books);
@@ -78,34 +73,30 @@ const deleteBookHandler =(req,res)=>{
 
 
 };
-
-
-
-
-
-
-
+//GET
 app.get('/books', getBooksHandler);
-
+//POST
 app.post('/books', postBooksHandler);
+//DELETE
 app.delete('/books/:id',deleteBookHandler);
+
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
 
 
 
-const seedBook = () =>{
-  const book1 = new modelCollecion.bookModel({
-    title : 'In Search of Lost Time',
+// const seedBook = () =>{
+//   const book1 = new modelCollecion.bookModel({
+//     title : 'In Search of Lost Time',
       
-    description : `Swann's Way, the first part of A la recherche de temps perdu, Marcel Proust's seven-part cycle, was published in 1913. In it, Proust introduces the themes that run through the entire work. The narrator recalls his childhood, aided by the famous madeleine; and describes M. Swann's passion for Odette. The work is incomparable. Edmund Wilson said "[Proust] has supplied for the first time in literature an equivalent in the full scale for the new theory of modern physics."`,
+//     description : `Swann's Way, the first part of A la recherche de temps perdu, Marcel Proust's seven-part cycle, was published in 1913. In it, Proust introduces the themes that run through the entire work. The narrator recalls his childhood, aided by the famous madeleine; and describes M. Swann's passion for Odette. The work is incomparable. Edmund Wilson said "[Proust] has supplied for the first time in literature an equivalent in the full scale for the new theory of modern physics."`,
     
-    status : 'FAVORITE FIVE',
-  });
+//     status : 'FAVORITE FIVE',
+//   });
 
-  const user1 = new modelCollecion.userModel({
-    email : 'tareq.ha130@yahoo.com',
-    books: [book1],
-  });
+//   const user1 = new modelCollecion.userModel({
+//     email : 'tareq.ha130@yahoo.com',
+//     books: [book1],
+//   });
 
   // const book2 = new modelCollecion.bookModel({
   //   title : 'Ulysses',
@@ -154,13 +145,13 @@ const seedBook = () =>{
   //   img : 'https://d3i5mgdwi2ze58.cloudfront.net/jzeie89rkkv1s2q7dwwgiysixnty',
   // });
 
-  book1.save();
-  user1.save();
+  // book1.save();
+  // user1.save();
   // book2.save();
   // book3.save();
   // book4.save();
   // book5.save();
   // book6.save();
-};
+// };
 
 // seedBook();
