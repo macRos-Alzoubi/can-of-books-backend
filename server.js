@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
-mongoose.connect('mongodb://localhost:27017/userBook', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.MONGODB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
 
 
 
